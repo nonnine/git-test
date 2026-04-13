@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Simple Timer</title>
+    <style>
+        /* CSS: ส่วนที่ทำให้เว็บสวยงาม */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        h1 { margin-bottom: 1rem; font-weight: 300; }
+        #display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            font-variant-numeric: tabular-nums; /* ป้องกันตัวเลขขยับไปมา */
+        }
+        .controls button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            margin: 0.5rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .start { background-color: #48bb78; color: white; }
+        .stop { background-color: #f56565; color: white; }
+        .reset { background-color: #a0aec0; color: white; }
+        button:hover { transform: scale(1.05); opacity: 0.9; }
+        button:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Timer Online</h1>
+        <div id="display">00:00:00</div>
+        
+        <div class="controls">
+            <button class="start" onclick="start()">Start</button>
+            <button class="stop" onclick="stop()">Stop</button>
+            <button class="reset" onclick="reset()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        /* JavaScript: ส่วนที่ควบคุมการทำงาน */
+        let startTime, elapsedTime = 0, timerInterval;
+
+        function timeToString(time) {
+            let diffInHrs = time / 3600000;
+            let hh = Math.floor(diffInHrs);
+
+            let diffInMin = (diffInHrs - hh) * 60;
+            let mm = Math.floor(diffInMin);
+
+            let diffInSec = (diffInMin - mm) * 60;
+            let ss = Math.floor(diffInSec);
+
+            let formattedHH = hh.toString().padStart(2, "0");
+            let formattedMM = mm.toString().padStart(2, "0");
+            let formattedSS = ss.toString().padStart(2, "0");
+
+            return `${formattedHH}:${formattedMM}:${formattedSS}`;
+        }
+
+        function print(txt) {
+            document.getElementById("display").innerHTML = txt;
+        }
+
+        function start() {
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(function printTime() {
+                elapsedTime = Date.now() - startTime;
+                print(timeToString(elapsedTime));
+            }, 1000);
+            showButton("STOP");
+        }
+
+        function stop() {
+            clearInterval(timerInterval);
+            showButton("START");
+        }
+
+        function reset() {
+            clearInterval(timerInterval);
+            print("00:00:00");
+            elapsedTime = 0;
+            showButton("START");
+        }
+
+        // ฟังก์ชันเสริมสำหรับสลับปุ่ม (ถ้าต้องการ)
+        function showButton(buttonKey) {
+            // โค้ดส่วนนี้เอาไว้จัดการ UI เพิ่มเติมได้ค่ะ
+        }
+    </script>
+</body>
+</html>
